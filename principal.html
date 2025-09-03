@@ -216,10 +216,10 @@
         <div class="container">
             <div data-aos="fade-up">
                 <h1 class="display-4 fw-bold mb-4" style="color: var(--dark-pink);">
-                    Fórmula Magistral de Flores de Bach.
-                    <span class="d-block" style="color: var(--primary-pink);"></span>
+                    Goteros Artesanales
+                    <span class="d-block" style="color: var(--primary-pink);">Flores de Bach</span>
                 </h1>
-                <p class="lead mb-4" style="color: var(--dark-pink);"><i class="fas fa-spa text-pink me-2"></i>
+                <p class="lead mb-4" style="color: var(--dark-pink);">
                     Elaborados con amor y dedicación para acompañar tu bienestar emocional.<br>
                     Cada gotero es preparado artesanalmente siguiendo los métodos tradicionales del Dr. Bach.
                 </p>
@@ -270,10 +270,6 @@
                     <div>
                         <i class="fas fa-envelope me-2" style="color: var(--primary-pink);"></i>
                         <span style="color: var(--dark-pink); font-style: italic;">Próximamente: email corporativo</span>
-                    </div>
-                     <div>
-                        <i class="fa-brands fa-whatsapp me-2" style="color: var(--primary-pink);"></i>
-                        <span style="color: var(--dark-pink); font-style: italic;">+598 092 999 999</span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -352,10 +348,11 @@
                             <h4 class="mb-0 price-tag" id="cartTotal">$0</h4>
                         </div>
                         <div class="d-grid gap-2">
-                            <!-- PayPal Button Container -->
-                            <div id="paypal-button-container" style="display: none;"></div>
-                            <button class="btn" style="background: #0070ba; color: white;" onclick="payWithPayPal()" id="paypal-btn-basic">
+                            <button class="btn" style="background: #0070ba; color: white;" onclick="payWithPayPal()">
                                 <i class="fab fa-paypal me-2"></i>Pagar con PayPal
+                            </button>
+                            <button class="btn" style="background: #00aaee; color: white;" onclick="payWithMercadoPago()">
+                                <i class="fas fa-credit-card me-2"></i>Pagar con MercadoPago
                             </button>
                         </div>
                     </div>
@@ -368,8 +365,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.8.0/dist/sweetalert2.all.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AZ_pFKyLDzWkymXXDVXuSQQFyr6baEkDWx91jYE5bu7EIe9BUcDmGNPKqwA1F0T_ij4VgptY7-UmsmeX&currency=USD&intent=capture"></script>
 
     <script>
         // Global variables
@@ -582,9 +577,6 @@
             const cartItems = document.getElementById('cartItems');
             const cartTotal = document.getElementById('cartTotal');
 
-            // Reset PayPal button when cart changes
-            resetPayPalButton();
-
             if (cart.length === 0) {
                 cartItems.innerHTML = `
                     <div class="text-center py-4">
@@ -665,107 +657,38 @@
                 return;
             }
 
-            // Mostrar el botón PayPal integrado
-            showPayPalButton();
+            Swal.fire({
+                icon: 'info',
+                title: 'Redirigiendo a PayPal...',
+                text: 'Configura tu integración con PayPal en el código',
+                confirmButtonColor: '#ec4899'
+            });
+
+            // TODO: Implement PayPal integration
+            // Example: window.location.href = 'your-paypal-checkout-url';
         }
 
-        function showPayPalButton() {
-            // Ocultar botón básico y mostrar PayPal integrado
-            document.getElementById('paypal-btn-basic').style.display = 'none';
-            document.getElementById('paypal-button-container').style.display = 'block';
-            
-            // Limpiar contenedor
-            document.getElementById('paypal-button-container').innerHTML = '';
+        // MercadoPago payment
+        function payWithMercadoPago() {
+            if (cart.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Carrito vacío',
+                    text: 'Agrega productos antes de proceder al pago',
+                    confirmButtonColor: '#ec4899'
+                });
+                return;
+            }
 
-            // Calcular total en USD (ajustar según tu cambio)
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const totalUSD = (total / 40).toFixed(2); // 1 USD ≈ 40 UYU
+            Swal.fire({
+                icon: 'info',
+                title: 'Redirigiendo a MercadoPago...',
+                text: 'Configura tu integración con MercadoPago en el código',
+                confirmButtonColor: '#ec4899'
+            });
 
-            // Crear botón PayPal integrado
-            paypal.Buttons({
-                style: {
-                    color: 'blue',
-                    shape: 'rect',
-                    label: 'pay',
-                    height: 45
-                },
-                createOrder: function(data, actions) {
-                    // Crear items para PayPal
-                    const items = cart.map(item => ({
-                        name: item.name,
-                        unit_amount: {
-                            currency_code: 'USD',
-                            value: (item.price / 40).toFixed(2)
-                        },
-                        quantity: item.quantity.toString(),
-                        description: item.category,
-                        category: 'PHYSICAL_GOODS'
-                    }));
-
-                    return actions.order.create({
-                        purchase_units: [{
-                            reference_id: 'flores-bach-' + Date.now(),
-                            description: 'Goteros Flores de Bach - Claudia De Meis',
-                            amount: {
-                                currency_code: 'USD',
-                                value: totalUSD,
-                                breakdown: {
-                                    item_total: {
-                                        currency_code: 'USD',
-                                        value: totalUSD
-                                    }
-                                }
-                            },
-                            items: items
-                        }],
-                        application_context: {
-                            brand_name: 'Flores de Bach - Claudia De Meis',
-                            landing_page: "LOGIN",
-                            user_action: 'PAY_NOW',
-                            shipping_preference: 'NO_SHIPPING'
-                        }
-                    });
-                },
-                onApprove: function(data, actions) {
-                    return actions.order.capture().then(function(orderData) {
-                        // Pago exitoso
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Pago exitoso!',
-                            html: `Gracias por tu compra.<br>
-                                   <b>ID:</b> ${orderData.id}<br>
-                                   Te contactaremos por Instagram para la entrega.`,
-                            confirmButtonColor: '#ec4899',
-                            confirmButtonText: 'Perfecto'
-                        }).then(() => {
-                            // Limpiar carrito
-                            cart = [];
-                            updateCartUI();
-                            updateCartDisplay();
-                            // Cerrar modal
-                            bootstrap.Modal.getInstance(document.getElementById('cartModal')).hide();
-                        });
-                    });
-                },
-                onError: function(err) {
-                    console.error('PayPal Error:', err);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error en el pago',
-                        text: 'Hubo un problema. Intenta nuevamente.',
-                        confirmButtonColor: '#ec4899'
-                    });
-                    resetPayPalButton();
-                },
-                onCancel: function() {
-                    resetPayPalButton();
-                }
-            }).render('#paypal-button-container');
-        }
-
-        function resetPayPalButton() {
-            document.getElementById('paypal-btn-basic').style.display = 'block';
-            document.getElementById('paypal-button-container').style.display = 'none';
+            // TODO: Implement MercadoPago integration
+            // Example: window.location.href = 'your-mercadopago-checkout-url';
         }
     </script>
 </body>
