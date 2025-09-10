@@ -216,10 +216,10 @@
         <div class="container">
             <div data-aos="fade-up">
                 <h1 class="display-4 fw-bold mb-4" style="color: var(--dark-pink);">
-                    Goteros Artesanales
-                    <span class="d-block" style="color: var(--primary-pink);">Flores de Bach</span>
+                    Fórmula Magistral de Flores de Bach.
+                    <span class="d-block" style="color: var(--primary-pink);"></span>
                 </h1>
-                <p class="lead mb-4" style="color: var(--dark-pink);">
+                <p class="lead mb-4" style="color: var(--dark-pink);"><i class="fas fa-spa text-pink me-2"></i>
                     Elaborados con amor y dedicación para acompañar tu bienestar emocional.<br>
                     Cada gotero es preparado artesanalmente siguiendo los métodos tradicionales del Dr. Bach.
                 </p>
@@ -270,6 +270,10 @@
                     <div>
                         <i class="fas fa-envelope me-2" style="color: var(--primary-pink);"></i>
                         <span style="color: var(--dark-pink); font-style: italic;">Próximamente: email corporativo</span>
+                    </div>
+                     <div>
+                        <i class="fa-brands fa-whatsapp me-2" style="color: var(--primary-pink);"></i>
+                        <span style="color: var(--dark-pink); font-style: italic;">+598 092 912 456</span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -348,11 +352,10 @@
                             <h4 class="mb-0 price-tag" id="cartTotal">$0</h4>
                         </div>
                         <div class="d-grid gap-2">
-                            <button class="btn" style="background: #0070ba; color: white;" onclick="payWithPayPal()">
+                            <!-- PayPal Button Container -->
+                            <div id="paypal-button-container" style="display: none;"></div>
+                            <button class="btn" style="background: #0070ba; color: white;" onclick="payWithPayPal()" id="paypal-btn-basic">
                                 <i class="fab fa-paypal me-2"></i>Pagar con PayPal
-                            </button>
-                            <button class="btn" style="background: #00aaee; color: white;" onclick="payWithMercadoPago()">
-                                <i class="fas fa-credit-card me-2"></i>Pagar con MercadoPago
                             </button>
                         </div>
                     </div>
@@ -365,6 +368,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.8.0/dist/sweetalert2.all.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AaURHUsuJaAQ4Jt_Cenr4dkDox7HYri8FyANn47ge6ZeK-c0ESlhY44WCRnjC-2AjCG5Piku7kLZLK_1&currency=USD&intent=capture"></script>
 
     <script>
         // Global variables
@@ -379,7 +384,7 @@
                 name: "Rescue Remedy",
                 price: 850,
                 description: "Mezcla de emergencia para momentos de crisis, estrés agudo o shock emocional. Combina Star of Bethlehem, Rock Rose, Impatiens, Cherry Plum y Clematis.",
-                image: "/img/img1.png",
+                image: "../img/img1.png",
                 category: "Emergencia",
                 ingredients: ["Star of Bethlehem", "Rock Rose", "Impatiens", "Cherry Plum", "Clematis"],
                 usage: "4 gotas bajo la lengua o en agua, hasta 6 veces al día según necesidad."
@@ -389,7 +394,7 @@
                 name: "Mimulus",
                 price: 750,
                 description: "Para miedos conocidos y específicos. Ayuda a enfrentar con valentía las situaciones que generan temor.",
-                image: "/img/img2.png",
+                image: "../img/img2.png",
                 category: "Miedos",
                 ingredients: ["Mimulus"],
                 usage: "2 gotas en agua, 4 veces al día o según indicación del terapeuta."
@@ -399,7 +404,7 @@
                 name: "White Chestnut",
                 price: 750,
                 description: "Para pensamientos repetitivos e indeseados. Calma la mente y ayuda a encontrar paz mental.",
-                image: "/img/img3.png",
+                image: "../img/img3.png",
                 category: "Pensamientos",
                 ingredients: ["White Chestnut"],
                 usage: "2 gotas en agua o bajo la lengua, 3-4 veces al día."
@@ -409,7 +414,7 @@
                 name: "Bach Flowers Blend Personalizado",
                 price: 950,
                 description: "Mezcla personalizada según tu consulta terapéutica. Incluye hasta 7 esencias específicas para tu proceso.",
-                image: "/img/img5.png",
+                image: "../img/img5.png",
                 category: "Personalizado",
                 ingredients: ["Consultar según necesidad"],
                 usage: "Según indicación personalizada en consulta."
@@ -417,9 +422,9 @@
             {
                 id: 5,
                 name: "Elm",
-                price: 750,
+                price: 800,
                 description: "Para momentos de agobio y sensación de no poder con las responsabilidades. Restaura la confianza en las propias capacidades.",
-                image: "/img/img4.png",
+                image: "../img/img4.png",
                 category: "Responsabilidad",
                 ingredients: ["Elm"],
                 usage: "2 gotas en agua, 4 veces al día durante períodos de estrés."
@@ -429,9 +434,19 @@
                 name: "Walnut",
                 price: 750,
                 description: "Para períodos de transición y cambios importantes. Protege de influencias externas y ayuda a mantener el propio camino.",
-                image: "/img/img6.png",
+                image: "../img/img6.png",
                 category: "Transiciones",
                 ingredients: ["Walnut"],
+                usage: "2 gotas en agua, 3 veces al día durante procesos de cambio."
+            },
+            {
+                id: 7,
+                name: "Test",
+                price: 1,
+                description: "Producto de prueba.",
+                image: "../img/img1.png",
+                category: "Prueba",
+                ingredients: ["Walnut", "Elm"],
                 usage: "2 gotas en agua, 3 veces al día durante procesos de cambio."
             }
         ];
@@ -577,6 +592,9 @@
             const cartItems = document.getElementById('cartItems');
             const cartTotal = document.getElementById('cartTotal');
 
+            // Reset PayPal button when cart changes
+            resetPayPalButton();
+
             if (cart.length === 0) {
                 cartItems.innerHTML = `
                     <div class="text-center py-4">
@@ -657,38 +675,107 @@
                 return;
             }
 
-            Swal.fire({
-                icon: 'info',
-                title: 'Redirigiendo a PayPal...',
-                text: 'Configura tu integración con PayPal en el código',
-                confirmButtonColor: '#ec4899'
-            });
-
-            // TODO: Implement PayPal integration
-            // Example: window.location.href = 'your-paypal-checkout-url';
+            // Mostrar el botón PayPal integrado
+            showPayPalButton();
         }
 
-        // MercadoPago payment
-        function payWithMercadoPago() {
-            if (cart.length === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Carrito vacío',
-                    text: 'Agrega productos antes de proceder al pago',
-                    confirmButtonColor: '#ec4899'
-                });
-                return;
-            }
+        function showPayPalButton() {
+            // Ocultar botón básico y mostrar PayPal integrado
+            document.getElementById('paypal-btn-basic').style.display = 'none';
+            document.getElementById('paypal-button-container').style.display = 'block';
+            
+            // Limpiar contenedor
+            document.getElementById('paypal-button-container').innerHTML = '';
 
-            Swal.fire({
-                icon: 'info',
-                title: 'Redirigiendo a MercadoPago...',
-                text: 'Configura tu integración con MercadoPago en el código',
-                confirmButtonColor: '#ec4899'
-            });
+            // Calcular total en USD (ajustar según tu cambio)
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const totalUSD = (total / 40).toFixed(2); // 1 USD ≈ 40 UYU
 
-            // TODO: Implement MercadoPago integration
-            // Example: window.location.href = 'your-mercadopago-checkout-url';
+            // Crear botón PayPal integrado
+            paypal.Buttons({
+                style: {
+                    color: 'blue',
+                    shape: 'rect',
+                    label: 'pay',
+                    height: 45
+                },
+                createOrder: function(data, actions) {
+                    // Crear items para PayPal
+                    const items = cart.map(item => ({
+                        name: item.name,
+                        unit_amount: {
+                            currency_code: 'USD',
+                            value: (item.price / 40).toFixed(2)
+                        },
+                        quantity: item.quantity.toString(),
+                        description: item.category,
+                        category: 'PHYSICAL_GOODS'
+                    }));
+
+                    return actions.order.create({
+                        purchase_units: [{
+                            reference_id: 'flores-bach-' + Date.now(),
+                            description: 'Goteros Flores de Bach - Claudia De Meis',
+                            amount: {
+                                currency_code: 'USD',
+                                value: totalUSD,
+                                breakdown: {
+                                    item_total: {
+                                        currency_code: 'USD',
+                                        value: totalUSD
+                                    }
+                                }
+                            },
+                            items: items
+                        }],
+                        application_context: {
+                            brand_name: 'Flores de Bach - Claudia De Meis',
+                            landing_page: "LOGIN",
+                            user_action: 'PAY_NOW',
+                            shipping_preference: 'NO_SHIPPING'
+                        }
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(orderData) {
+                        // Pago exitoso
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Pago exitoso!',
+                            html: `Gracias por tu compra.<br>
+                                   <b>ID:</b> ${orderData.id}<br>
+                                   Te contactaremos por Instagram para la entrega.`,
+                            confirmButtonColor: '#ec4899',
+                            confirmButtonText: 'Perfecto'
+                        }).then(() => {
+                            // Limpiar carrito
+                            cart = [];
+                            updateCartUI();
+                            updateCartDisplay();
+                            // Cerrar modal
+                            bootstrap.Modal.getInstance(document.getElementById('cartModal')).hide();
+                        });
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error en el pago',
+                        text: 'Hubo un problema. Intenta nuevamente.',
+                        confirmButtonColor: '#ec4899'
+                    });
+                    resetPayPalButton();
+                },
+                onCancel: function() {
+                    resetPayPalButton();
+                }
+            }).render('#paypal-button-container');
+        }
+
+        function resetPayPalButton() {
+            document.getElementById('paypal-btn-basic').style.display = 'block';
+            document.getElementById('paypal-button-container').style.display = 'none';
         }
     </script>
 </body>

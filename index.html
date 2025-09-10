@@ -273,7 +273,7 @@
                     </div>
                      <div>
                         <i class="fa-brands fa-whatsapp me-2" style="color: var(--primary-pink);"></i>
-                        <span style="color: var(--dark-pink); font-style: italic;">+598 092 999 999</span>
+                        <span style="color: var(--dark-pink); font-style: italic;">+598 092 912 456</span>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -357,6 +357,10 @@
                             <button class="btn" style="background: #0070ba; color: white;" onclick="payWithPayPal()" id="paypal-btn-basic">
                                 <i class="fab fa-paypal me-2"></i>Pagar con PayPal
                             </button>
+                            <!-- MercadoPago Button -->
+                            <button class="btn" style="background: #00b1ea; color: white;" onclick="payWithMercadoPago()">
+                                <i class="fas fa-credit-card me-2"></i>Pagar con MercadoPago
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -369,7 +373,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.8.0/dist/sweetalert2.all.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AZ_pFKyLDzWkymXXDVXuSQQFyr6baEkDWx91jYE5bu7EIe9BUcDmGNPKqwA1F0T_ij4VgptY7-UmsmeX&currency=USD&intent=capture"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AaURHUsuJaAQ4Jt_Cenr4dkDox7HYri8FyANn47ge6ZeK-c0ESlhY44WCRnjC-2AjCG5Piku7kLZLK_1&currency=USD&intent=capture"></script>
 
     <script>
         // Global variables
@@ -437,6 +441,16 @@
                 image: "../img/img6.png",
                 category: "Transiciones",
                 ingredients: ["Walnut"],
+                usage: "2 gotas en agua, 3 veces al día durante procesos de cambio."
+            },
+            {
+                id: 7,
+                name: "Test",
+                price: 1,
+                description: "Producto de prueba.",
+                image: "../img/img1.png",
+                category: "Prueba",
+                ingredients: ["Walnut", "Elm"],
                 usage: "2 gotas en agua, 3 veces al día durante procesos de cambio."
             }
         ];
@@ -766,6 +780,28 @@
         function resetPayPalButton() {
             document.getElementById('paypal-btn-basic').style.display = 'block';
             document.getElementById('paypal-button-container').style.display = 'none';
+        }
+
+        // MercadoPago payment
+        function payWithMercadoPago() {
+            if (cart.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Carrito vacío',
+                    text: 'Agrega productos antes de proceder al pago',
+                    confirmButtonColor: '#ec4899'
+                });
+                return;
+            }
+
+            // Para implementación completa de MercadoPago necesitas un backend
+            Swal.fire({
+                icon: 'info',
+                title: 'MercadoPago',
+                html: '<strong>El pago por este medio aún no está habilitado </strong>',
+                confirmButtonColor: '#ec4899',
+                confirmButtonText: 'Entendido'
+            });
         }
     </script>
 </body>
