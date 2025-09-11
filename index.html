@@ -289,7 +289,7 @@
                 style="color: var(--primary-pink); font-size: 1.5rem"
               ></i>
               <h5 class="mb-0" style="color: var(--dark-pink)">
-                Flores de Bach
+                Bienestar Floral
               </h5>
             </div>
             <p style="color: var(--dark-pink)">
@@ -369,7 +369,7 @@
                   class="fas fa-check me-2"
                   style="color: var(--primary-pink)"
                 ></i
-                >Entrega en Uruguay
+                >Entrega en todo el Uruguay
               </li>
             </ul>
           </div>
@@ -633,53 +633,53 @@
       }
 
       // Display products in grid
-      function displayProducts() {
-        const grid = document.getElementById("productsGrid");
-        grid.innerHTML = "";
+      // Reemplaza tu función displayProducts con esta versión:
 
-        products.forEach((product, index) => {
-          const productCard = `
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="${
-                      index * 100
-                    }">
-                        <div class="product-card" onclick="showProductDetail(${
-                          product.id
-                        })">
-                            <div class="product-image">
-                                <img src="${product.image}" alt="${
-            product.name
-          }">
-                            </div>
-                            <div class="p-4">
-                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                    <h5 class="fw-bold mb-0" style="color: var(--dark-pink);">${
-                                      product.name
-                                    }</h5>
-                                    <span class="badge badge-category">${
-                                      product.category
-                                    }</span>
-                                </div>
-                                <p class="text-muted mb-3" style="font-size: 0.9rem;">${product.description.substring(
-                                  0,
-                                  100
-                                )}...</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="price-tag">$${
-                                      product.price
-                                    }</span>
-                                    <button class="btn btn-pink" onclick="event.stopPropagation(); addToCart(${
-                                      product.id
-                                    })">
-                                        <i class="fas fa-plus me-2"></i>Agregar
-                                    </button>
-                                </div>
-                            </div>
+function displayProducts() {
+    const grid = document.getElementById("productsGrid");
+    grid.innerHTML = "";
+
+    products.forEach((product, index) => {
+        // Detectar si es el producto personalizado (ID 4)
+        const isPersonalized = product.id === 4;
+        
+        // Definir el botón según el tipo de producto
+        const buttonHTML = isPersonalized ? 
+            `<button class="btn btn-success" onclick="event.stopPropagation(); showConsultationModal()">
+                <i class="fab fa-whatsapp me-2"></i>Consultar
+            </button>` :
+            `<button class="btn btn-pink" onclick="event.stopPropagation(); addToCart(${product.id})">
+                <i class="fas fa-plus me-2"></i>Agregar
+            </button>`;
+
+        // Definir el badge según el tipo de producto
+        const badgeHTML = isPersonalized ?
+            `<span class="badge" style="background: linear-gradient(45deg, #25D366, #128C7E); color: white;">Consulta requerida</span>` :
+            `<span class="badge badge-category">${product.category}</span>`;
+
+        const productCard = `
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="${index * 100}">
+                <div class="product-card" onclick="showProductDetail(${product.id})">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="fw-bold mb-0" style="color: var(--dark-pink);">${product.name}</h5>
+                            ${badgeHTML}
+                        </div>
+                        <p class="text-muted mb-3" style="font-size: 0.9rem;">${product.description.substring(0, 100)}...</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag">$${product.price}</span>
+                            ${buttonHTML}
                         </div>
                     </div>
-                `;
-          grid.innerHTML += productCard;
-        });
-      }
+                </div>
+            </div>
+        `;
+        grid.innerHTML += productCard;
+    });
+}
 
       // Show product detail modal
       // Reemplaza tu función showProductDetail con esta versión corregida:
@@ -940,7 +940,7 @@ function showProductDetail(productId) {
                 purchase_units: [
                   {
                     reference_id: "flores-bach-" + Date.now(),
-                    description: "Goteros Flores de Bach - Claudia De Meis",
+                    description: "Bienestar Floral - Claudia De Meis",
                     amount: {
                       currency_code: "USD",
                       value: totalUSD,
@@ -955,7 +955,7 @@ function showProductDetail(productId) {
                   },
                 ],
                 application_context: {
-                  brand_name: "Flores de Bach - Claudia De Meis",
+                  brand_name: "Bienestar Floral",
                   landing_page: "LOGIN",
                   user_action: "PAY_NOW",
                   shipping_preference: "NO_SHIPPING",
