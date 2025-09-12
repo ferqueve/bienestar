@@ -210,6 +210,13 @@
         font-weight: 700;
         margin-bottom: 3rem;
       }
+      .fondo-flores-bach {
+        background-image: url("img/fondo.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 50px 20px;
+      }
     </style>
   </head>
   <body>
@@ -243,7 +250,7 @@
     <!-- Hero Section -->
     <section class="hero-section text-center">
       <div class="container">
-        <div data-aos="fade-up">
+        <div data-aos="fade-up" class="aos-init aos-animate fondo-flores-bach">
           <h1 class="display-4 fw-bold mb-4" style="color: var(--dark-pink)">
             Fórmula Magistral de Flores de Bach.
             <span class="d-block" style="color: var(--primary-pink)"></span>
@@ -507,12 +514,11 @@
     <script src="https://www.paypal.com/sdk/js?client-id=AaURHUsuJaAQ4Jt_Cenr4dkDox7HYri8FyANn47ge6ZeK-c0ESlhY44WCRnjC-2AjCG5Piku7kLZLK_1&currency=USD&intent=capture"></script>
 
     <script>
-
       // Global variables
       let products = [];
       let cart = [];
       let currentProduct = null;
-      const API_BASE_URL = 'https://bienestarfloral.com';
+      const API_BASE_URL = "https://bienestarfloral.com";
       // Sample products (replace with your GitHub JSON URL)
       const sampleProducts = [
         {
@@ -897,116 +903,129 @@
         showPayPalButton();
       }
 
-     function showPayPalButton() {
-    document.getElementById('paypal-btn-basic').style.display = 'none';
-    document.getElementById('paypal-button-container').style.display = 'block';
-    document.getElementById('paypal-button-container').innerHTML = '';
+      function showPayPalButton() {
+        document.getElementById("paypal-btn-basic").style.display = "none";
+        document.getElementById("paypal-button-container").style.display =
+          "block";
+        document.getElementById("paypal-button-container").innerHTML = "";
 
-    const exchangeRate = 40;
-    const itemsUSD = cart.map(item => {
-        const unitPriceUSD = parseFloat((item.price / exchangeRate).toFixed(2));
-        return {
+        const exchangeRate = 40;
+        const itemsUSD = cart.map((item) => {
+          const unitPriceUSD = parseFloat(
+            (item.price / exchangeRate).toFixed(2)
+          );
+          return {
             ...item,
             unitPriceUSD: unitPriceUSD,
-            subtotalUSD: parseFloat((unitPriceUSD * item.quantity).toFixed(2))
-        };
-    });
+            subtotalUSD: parseFloat((unitPriceUSD * item.quantity).toFixed(2)),
+          };
+        });
 
-    const totalUSD = itemsUSD.reduce((sum, item) => sum + item.subtotalUSD, 0).toFixed(2);
+        const totalUSD = itemsUSD
+          .reduce((sum, item) => sum + item.subtotalUSD, 0)
+          .toFixed(2);
 
-    paypal.Buttons({
-        style: {
-            color: 'blue',
-            shape: 'rect',
-            label: 'pay',
-            height: 45
-        },
-        createOrder: function(data, actions) {
-            return actions.order.create({
-                purchase_units: [{
-                    reference_id: 'flores-bach-' + Date.now(),
-                    description: 'Bienestar Floral - Claudia De Meis',
+        paypal
+          .Buttons({
+            style: {
+              color: "blue",
+              shape: "rect",
+              label: "pay",
+              height: 45,
+            },
+            createOrder: function (data, actions) {
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    reference_id: "flores-bach-" + Date.now(),
+                    description: "Bienestar Floral - Claudia De Meis",
                     amount: {
-                        currency_code: 'USD',
-                        value: totalUSD,
-                        breakdown: {
-                            item_total: {
-                                currency_code: 'USD',
-                                value: totalUSD
-                            }
-                        }
-                    },
-                    items: itemsUSD.map(item => ({
-                        name: item.name,
-                        unit_amount: {
-                            currency_code: 'USD',
-                            value: item.unitPriceUSD.toFixed(2)
+                      currency_code: "USD",
+                      value: totalUSD,
+                      breakdown: {
+                        item_total: {
+                          currency_code: "USD",
+                          value: totalUSD,
                         },
-                        quantity: item.quantity.toString(),
-                        description: item.category,
-                        category: 'PHYSICAL_GOODS'
-                    }))
-                }],
+                      },
+                    },
+                    items: itemsUSD.map((item) => ({
+                      name: item.name,
+                      unit_amount: {
+                        currency_code: "USD",
+                        value: item.unitPriceUSD.toFixed(2),
+                      },
+                      quantity: item.quantity.toString(),
+                      description: item.category,
+                      category: "PHYSICAL_GOODS",
+                    })),
+                  },
+                ],
                 application_context: {
-                    brand_name: 'Bienestar Floral',
-                    landing_page: 'LOGIN',
-                    user_action: 'PAY_NOW',
-                    shipping_preference: 'NO_SHIPPING'
-                }
-            });
-        },
-        onApprove: function(data, actions) {
-            // Mostrar loading
-            Swal.fire({
-                title: 'Procesando pago...',
-                text: 'Por favor espera mientras verificamos tu pago',
+                  brand_name: "Bienestar Floral",
+                  landing_page: "LOGIN",
+                  user_action: "PAY_NOW",
+                  shipping_preference: "NO_SHIPPING",
+                },
+              });
+            },
+            onApprove: function (data, actions) {
+              // Mostrar loading
+              Swal.fire({
+                title: "Procesando pago...",
+                text: "Por favor espera mientras verificamos tu pago",
                 allowOutsideClick: false,
                 didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+                  Swal.showLoading();
+                },
+              });
 
-            return actions.order.capture().then(function(orderData) {
-                // Crear orden en el backend
-                return createOrderInBackend(orderData, 'paypal');
-            }).then(() => {
-                // Pago exitoso
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Pago exitoso!',
+              return actions.order
+                .capture()
+                .then(function (orderData) {
+                  // Crear orden en el backend
+                  return createOrderInBackend(orderData, "paypal");
+                })
+                .then(() => {
+                  // Pago exitoso
+                  Swal.fire({
+                    icon: "success",
+                    title: "¡Pago exitoso!",
                     html: `Gracias por tu compra.<br>
                            Te contactaremos por Instagram para la entrega.<br>
                            <strong>Revisa tu email</strong> para los detalles del pedido.`,
-                    confirmButtonColor: '#ec4899',
-                    confirmButtonText: 'Perfecto'
-                }).then(() => {
+                    confirmButtonColor: "#ec4899",
+                    confirmButtonText: "Perfecto",
+                  }).then(() => {
                     clearCart();
+                  });
+                })
+                .catch((error) => {
+                  console.error("Error processing payment:", error);
+                  Swal.fire({
+                    icon: "error",
+                    title: "Error al procesar el pago",
+                    text: "Hubo un problema. Por favor contacta con nosotros.",
+                    confirmButtonColor: "#ec4899",
+                  });
                 });
-            }).catch(error => {
-                console.error('Error processing payment:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error al procesar el pago',
-                    text: 'Hubo un problema. Por favor contacta con nosotros.',
-                    confirmButtonColor: '#ec4899'
-                });
-            });
-        },
-        onError: function(err) {
-            console.error('PayPal Error:', err);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error en el pago',
-                text: 'Hubo un problema. Intenta nuevamente.',
-                confirmButtonColor: '#ec4899'
-            });
-            resetPayPalButton();
-        },
-        onCancel: function() {
-            resetPayPalButton();
-        }
-    }).render('#paypal-button-container');
-}
+            },
+            onError: function (err) {
+              console.error("PayPal Error:", err);
+              Swal.fire({
+                icon: "error",
+                title: "Error en el pago",
+                text: "Hubo un problema. Intenta nuevamente.",
+                confirmButtonColor: "#ec4899",
+              });
+              resetPayPalButton();
+            },
+            onCancel: function () {
+              resetPayPalButton();
+            },
+          })
+          .render("#paypal-button-container");
+      }
 
       function resetPayPalButton() {
         document.getElementById("paypal-btn-basic").style.display = "block";
@@ -1014,7 +1033,6 @@
           "none";
       }
 
-      
       // Lista de emociones/síntomas que el paciente puede seleccionar
       const emotionsList = [
         "Sentimiento de derrota",
@@ -1394,79 +1412,83 @@ ${selectedEmotions.map((emotion) => `• ${emotion}`).join("\n")}
         });
       }
       // Función para crear orden en el backend
-async function createOrderInBackend(paymentData, paymentMethod) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/create-order.php`, {
-            method: 'POST',
+      async function createOrderInBackend(paymentData, paymentMethod) {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/create-order.php`, {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                payment_method: paymentMethod,
-                items: cart,
-                customer_email: paymentData.payer?.email_address || '',
-                customer_name: (paymentData.payer?.name?.given_name || '') + ' ' + (paymentData.payer?.name?.surname || '')
-            })
-        });
+              payment_method: paymentMethod,
+              items: cart,
+              customer_email: paymentData.payer?.email_address || "",
+              customer_name:
+                (paymentData.payer?.name?.given_name || "") +
+                " " +
+                (paymentData.payer?.name?.surname || ""),
+            }),
+          });
 
-        const orderData = await response.json();
+          const orderData = await response.json();
 
-        if (response.ok) {
+          if (response.ok) {
             return verifyPaymentInBackend(paymentData.id, orderData.order_id);
-        } else {
-            throw new Error(orderData.error || 'Error creating order');
+          } else {
+            throw new Error(orderData.error || "Error creating order");
+          }
+        } catch (error) {
+          console.error("Error creating order:", error);
+          throw error;
         }
+      }
 
-    } catch (error) {
-        console.error('Error creating order:', error);
-        throw error;
-    }
-}
-
-// Función para verificar pago en el backend
-async function verifyPaymentInBackend(paymentId, orderId) {
-    try {
-        const response = await fetch(`${API_BASE_URL}/api/verify-payment.php`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
+      // Función para verificar pago en el backend
+      async function verifyPaymentInBackend(paymentId, orderId) {
+        try {
+          const response = await fetch(
+            `${API_BASE_URL}/api/verify-payment.php`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
                 payment_id: paymentId,
-                order_id: orderId
-            })
-        });
+                order_id: orderId,
+              }),
+            }
+          );
 
-        const result = await response.json();
+          const result = await response.json();
 
-        if (response.ok && result.verified) {
+          if (response.ok && result.verified) {
             return result;
-        } else {
-            throw new Error(result.message || 'Payment verification failed');
+          } else {
+            throw new Error(result.message || "Payment verification failed");
+          }
+        } catch (error) {
+          console.error("Error verifying payment:", error);
+          throw error;
+        }
+      }
+
+      // REEMPLAZAR tu función payWithMercadoPago existente:
+      function payWithMercadoPago() {
+        if (cart.length === 0) {
+          Swal.fire({
+            icon: "warning",
+            title: "Carrito vacío",
+            text: "Agrega productos antes de proceder al pago",
+            confirmButtonColor: "#ec4899",
+          });
+          return;
         }
 
-    } catch (error) {
-        console.error('Error verifying payment:', error);
-        throw error;
-    }
-}
-
-// REEMPLAZAR tu función payWithMercadoPago existente:
-function payWithMercadoPago() {
-    if (cart.length === 0) {
+        // Mostrar modal para datos del cliente
         Swal.fire({
-            icon: 'warning',
-            title: 'Carrito vacío',
-            text: 'Agrega productos antes de proceder al pago',
-            confirmButtonColor: '#ec4899'
-        });
-        return;
-    }
-
-    // Mostrar modal para datos del cliente
-    Swal.fire({
-        title: 'Completar datos para MercadoPago',
-        html: `
+          title: "Completar datos para MercadoPago",
+          html: `
             <div class="mb-3">
                 <input type="text" id="customer-name" class="form-control" placeholder="Nombre completo" required>
             </div>
@@ -1474,88 +1496,89 @@ function payWithMercadoPago() {
                 <input type="email" id="customer-email" class="form-control" placeholder="Email" required>
             </div>
         `,
-        showCancelButton: true,
-        confirmButtonText: 'Continuar',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#ec4899',
-        preConfirm: () => {
-            const name = document.getElementById('customer-name').value;
-            const email = document.getElementById('customer-email').value;
-            
-            if (!name || !email) {
-                Swal.showValidationMessage('Por favor completa todos los campos');
-                return false;
-            }
-            
-            return { name, email };
-        }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            processMercadoPagoPayment(result.value);
-        }
-    });
-}
+          showCancelButton: true,
+          confirmButtonText: "Continuar",
+          cancelButtonText: "Cancelar",
+          confirmButtonColor: "#ec4899",
+          preConfirm: () => {
+            const name = document.getElementById("customer-name").value;
+            const email = document.getElementById("customer-email").value;
 
-// Función para procesar pago MercadoPago
-async function processMercadoPagoPayment(customerData) {
-    try {
-        Swal.fire({
-            title: 'Creando orden...',
-            text: 'Por favor espera',
+            if (!name || !email) {
+              Swal.showValidationMessage("Por favor completa todos los campos");
+              return false;
+            }
+
+            return { name, email };
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            processMercadoPagoPayment(result.value);
+          }
+        });
+      }
+
+      // Función para procesar pago MercadoPago
+      async function processMercadoPagoPayment(customerData) {
+        try {
+          Swal.fire({
+            title: "Creando orden...",
+            text: "Por favor espera",
             allowOutsideClick: false,
             didOpen: () => {
-                Swal.showLoading();
-            }
-        });
+              Swal.showLoading();
+            },
+          });
 
-        const response = await fetch(`${API_BASE_URL}/api/create-order.php`, {
-            method: 'POST',
+          const response = await fetch(`${API_BASE_URL}/api/create-order.php`, {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                payment_method: 'mercadopago',
-                items: cart,
-                customer_name: customerData.name,
-                customer_email: customerData.email
-            })
-        });
+              payment_method: "mercadopago",
+              items: cart,
+              customer_name: customerData.name,
+              customer_email: customerData.email,
+            }),
+          });
 
-        const data = await response.json();
+          const data = await response.json();
 
-        if (response.ok && data.init_point) {
+          if (response.ok && data.init_point) {
             Swal.close();
             // Redirigir a MercadoPago
-            window.open(data.init_point, '_blank');
-            
+            window.open(data.init_point, "_blank");
+
             Swal.fire({
-                icon: 'info',
-                title: 'Redirigiendo a MercadoPago',
-                html: 'Se abrió MercadoPago en una nueva pestaña.<br>Completa el pago y regresa aquí.',
-                confirmButtonColor: '#ec4899'
+              icon: "info",
+              title: "Redirigiendo a MercadoPago",
+              html: "Se abrió MercadoPago en una nueva pestaña.<br>Completa el pago y regresa aquí.",
+              confirmButtonColor: "#ec4899",
             });
-        } else {
-            throw new Error(data.error || 'Error creating order');
+          } else {
+            throw new Error(data.error || "Error creating order");
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se pudo procesar la orden. Intenta nuevamente.",
+            confirmButtonColor: "#ec4899",
+          });
         }
+      }
 
-    } catch (error) {
-        console.error('Error:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'No se pudo procesar la orden. Intenta nuevamente.',
-            confirmButtonColor: '#ec4899'
-        });
-    }
-}
-
-// Función para limpiar carrito después del pago exitoso
-function clearCart() {
-    cart = [];
-    updateCartUI();
-    updateCartDisplay();
-    bootstrap.Modal.getInstance(document.getElementById('cartModal')).hide();
-}
+      // Función para limpiar carrito después del pago exitoso
+      function clearCart() {
+        cart = [];
+        updateCartUI();
+        updateCartDisplay();
+        bootstrap.Modal.getInstance(
+          document.getElementById("cartModal")
+        ).hide();
+      }
     </script>
   </body>
 </html>
