@@ -1,0 +1,113 @@
+# .htaccess para HostGator - Bienestar Floral
+# Configuración de reescritura de URLs y seguridad
+
+RewriteEngine On
+
+# Configuración de CORS para HostGator
+<IfModule mod_headers.c>
+    Header always set Access-Control-Allow-Origin "*"
+    Header always set Access-Control-Allow-Methods "GET,POST,PUT,DELETE,OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type,Authorization"
+    Header always set Access-Control-Max-Age "86400"
+</IfModule>
+
+# Manejo de preflight requests para CORS
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ $1 [R=200,L]
+
+# API Routes - Reescritura de URLs amigables
+RewriteRule ^api/create-order/?$ api/create-order.php [L,QSA]
+RewriteRule ^api/verify-payment/?$ api/verify-payment.php [L,QSA]
+
+# Webhook Routes
+RewriteRule ^webhooks/paypal/?$ webhooks/paypal.php [L,QSA]
+RewriteRule ^webhooks/mercadopago/?$ webhooks/mercadopago.php [L,QSA]
+
+# Páginas de resultado de pago
+RewriteRule ^payment-success/?$ payment-success.php [L,QSA]
+RewriteRule ^payment-failure/?$ payment-failure.php [L,QSA]
+RewriteRule ^payment-pending/?$ payment-pending.php [L,QSA]
+
+# Redirect index - Archivo principal
+DirectoryIndex index.html
+
+# SEGURIDAD - Proteger archivos de configuración
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+<Files "database.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Permitir test-connection.php temporalmente
+# Comentar estas líneas después de probar
+<Files "test-connection.php">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# Proteger archivos sensibles
+<FilesMatch "\.(log|sql|bak)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Proteger carpetas del sistema
+<IfModule mod_rewrite.c>
+    RewriteRule ^vendor/.*$ - [F,L]
+    RewriteRule ^\.git/.*$ - [F,L]
+    RewriteRule ^\.env$ - [F,L]
+</IfModule>
+
+# Configuración de caché para archivos estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+</IfModule>
+
+# Compresión GZIP para mejor rendimiento
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# Configuración de seguridad adicional
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Bloquear acceso a archivos ocultos
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Configuración específica para PHP en HostGator
+<IfModule mod_php.c>
+    php_value max_execution_time 300
+    php_value memory_limit 256M
+    php_value post_max_size 50M
+    php_value upload_max_filesize 50M
+</IfModule>
+
+# Error pages personalizadas (opcional)
+# ErrorDocument 404 /404.html
+# ErrorDocument 500 /500.html

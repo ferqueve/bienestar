@@ -1,0 +1,13 @@
+{
+    "name": "bienestar-floral/ecommerce",
+    "description": "E-commerce para Flores de Bach - Claudia De Meis",
+    "type": "project",
+    "require": {
+        "phpmailer/phpmailer": "^6.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "BienestarFloral\\": "src/"
+        }
+    }
+}
