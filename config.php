@@ -2,8 +2,8 @@
 // config.php - Configuración FINAL para bienestarfloral.com
 return [
     'paypal' => [
-        'client_id' => 'AaURHUsuJaAQ4Jt_Cenr4dkDox7HYri8FyANn47ge6ZeK-c0ESlhY44WCRnjC-2AjCG5Piku7kLZLK_1',
-        'client_secret' => 'EG_RKv_GTwLAGFVPcIL4xiZi-BrRfj4YTktOHlHBjbXb5IZtWYdlVvoXuUQVFAtmNBWEQaaByAPnBoGE', // CAMBIAR por tu secret real
+        'client_id' => 'TU_CLIENT_ID',
+        'client_secret' => 'TU_CLIENT_SECRET', // CAMBIAR por tu secret real
         'mode' => 'live', // CAMBIAR a 'live' para producción
         'webhook_id' => 'TU_WEBHOOK_ID' // Se configura después
     ],
