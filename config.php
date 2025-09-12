@@ -1,16 +1,16 @@
 <?php
-// config.php - Configuración para HostGator con credenciales reales
+// config.php - Configuración FINAL para bienestarfloral.com
 return [
     'paypal' => [
         'client_id' => 'AaURHUsuJaAQ4Jt_Cenr4dkDox7HYri8FyANn47ge6ZeK-c0ESlhY44WCRnjC-2AjCG5Piku7kLZLK_1',
-        'client_secret' => 'EG_RKv_GTwLAGFVPcIL4xiZi-BrRfj4YTktOHlHBjbXb5IZtWYdlVvoXuUQVFAtmNBWEQaaByAPnBoGE', // CAMBIAR: Obtener desde developers.paypal.com
+        'client_secret' => 'EG_RKv_GTwLAGFVPcIL4xiZi-BrRfj4YTktOHlHBjbXb5IZtWYdlVvoXuUQVFAtmNBWEQaaByAPnBoGE', // CAMBIAR por tu secret real
         'mode' => 'live', // CAMBIAR a 'live' para producción
-        'webhook_id' => 'TU_WEBHOOK_ID' // CAMBIAR: ID del webhook de PayPal
+        'webhook_id' => 'TU_WEBHOOK_ID' // Se configura después
     ],
     'mercadopago' => [
-        'access_token' => 'TU_MERCADOPAGO_ACCESS_TOKEN', // CAMBIAR: Desde developers.mercadopago.com
-        'public_key' => 'TU_MERCADOPAGO_PUBLIC_KEY', // CAMBIAR: Clave pública
-        'webhook_secret' => 'TU_WEBHOOK_SECRET' // CAMBIAR: Secret para validar webhooks
+        'access_token' => 'TU_MERCADOPAGO_ACCESS_TOKEN', // Opcional: Solo si usarás MercadoPago
+        'public_key' => 'TU_MERCADOPAGO_PUBLIC_KEY',
+        'webhook_secret' => 'TU_WEBHOOK_SECRET'
     ],
     'database' => [
         'host' => 'localhost',
@@ -21,17 +21,16 @@ return [
     'email' => [
         'smtp_host' => 'smtp.gmail.com',
         'smtp_port' => 587,
-        'username' => 'demeisclaudia@gmail.com', // CAMBIAR: Tu email de Gmail
-        'password' => 'tu_app_password', // CAMBIAR: Contraseña de aplicación de Gmail
-        'from_email' => 'demeisclaudia@gmail.com', // CAMBIAR: Mismo email
+        'username' => 'demeisclaudia@gmail.com', // CAMBIAR si usas otro email
+        'password' => 'tu_app_password_gmail', // CAMBIAR: Generar contraseña de aplicación
+        'from_email' => 'demeisclaudia@gmail.com',
         'from_name' => 'Bienestar Floral - Claudia De Meis'
     ],
     'site' => [
-        'base_url' => 'https://bienestarfloral.com', // CAMBIAR: Tu dominio real de HostGator
+        'base_url' => 'https://bienestarfloral.com',
         'name' => 'Bienestar Floral',
         'contact_instagram' => '@claudia.de.meis.psicoterapeuta',
         'contact_email' => 'demeisclaudia@gmail.com',
         'contact_phone' => '+598 092 912 456'
     ]
 ];
-?>
