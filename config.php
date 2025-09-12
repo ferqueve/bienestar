@@ -3,8 +3,8 @@
 return [
     'paypal' => [
         'client_id' => 'AaURHUsuJaAQ4Jt_Cenr4dkDox7HYri8FyANn47ge6ZeK-c0ESlhY44WCRnjC-2AjCG5Piku7kLZLK_1',
-        'client_secret' => 'TU_PAYPAL_CLIENT_SECRET', // CAMBIAR: Obtener desde developers.paypal.com
-        'mode' => 'sandbox', // CAMBIAR a 'live' para producción
+        'client_secret' => 'EG_RKv_GTwLAGFVPcIL4xiZi-BrRfj4YTktOHlHBjbXb5IZtWYdlVvoXuUQVFAtmNBWEQaaByAPnBoGE', // CAMBIAR: Obtener desde developers.paypal.com
+        'mode' => 'live', // CAMBIAR a 'live' para producción
         'webhook_id' => 'TU_WEBHOOK_ID' // CAMBIAR: ID del webhook de PayPal
     ],
     'mercadopago' => [
