@@ -2,16 +2,27 @@
 // config.php - Configuración FINAL para bienestarfloral.com
 return [
     'paypal' => [
-        'client_id' => 'TU_CLIENT_ID',
-        'client_secret' => 'TU_CLIENT_SECRET', // CAMBIAR por tu secret real
+        'client_id' => 'Aeik_Dpc4NKf4uIqfo1p-Iejnk_a5WHXhCVSFxZ_LBYX2-9NcGwmBQevu4IF6FwtXZ2r4aYg_r1dsrQl',
+        'client_secret' => 'EBb89ySnKpF_FSj4zlMlQiiRbxRV8vMcSzK9Z2BEwaesEJd2PObCAHlHJ9tFhw_6_0sBgb-Jf9VIw845', // CAMBIAR por tu secret real
         'mode' => 'live', // CAMBIAR a 'live' para producción
-        'webhook_id' => 'TU_WEBHOOK_ID' // Se configura después
+        'webhook_id' => '2GL029296X733550S' // Se configura después
     ],
     'mercadopago' => [
         'access_token' => 'TU_MERCADOPAGO_ACCESS_TOKEN', // Opcional: Solo si usarás MercadoPago
         'public_key' => 'TU_MERCADOPAGO_PUBLIC_KEY',
         'webhook_secret' => 'TU_WEBHOOK_SECRET'
     ],
+    'bank_transfer' => [
+    'bank_name' => 'Banco Nación Argentina',
+    'account_holder' => 'Claudia Noemi De Meis Acosta',
+    'account_number' => 'CA $ 17602581066877',
+    'cuil' => '27955713287',
+    'cbu' => '0110258330025810668779',
+    'alias' => 'clau.bienestar.bna',
+    'currency' => 'ARS',
+    'instructions' => 'Incluir número de pedido en el concepto de la transferencia'
+    ],
+
     'database' => [
         'host' => 'localhost',
         'name' => 'ferna474_bienestar',
@@ -34,3 +45,4 @@ return [
         'contact_phone' => '+598 092 912 456'
     ]
 ];
+?>

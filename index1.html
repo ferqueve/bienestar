@@ -1030,98 +1030,106 @@
         bootstrap.Modal.getInstance(document.getElementById("cartModal")).hide();
       }
       
-      //=== Helper, para abrir el carrito si se selecciona otra forma de pago ===//
-      function hideCartModalIfOpen() {
-        const cartModalEl = document.getElementById('cartModal');
-        if (!cartModalEl) return Promise.resolve();
-        
-        const inst = bootstrap.Modal.getInstance(cartModalEl);
-        if (!inst) return Promise.resolve();
-        
-        inst.hide();
-        return new Promise((resolve) => setTimeout(resolve, 250)); // esperar transición
-      }
-
       // ===== TRANSFERENCIA BANCARIA CON CONVERSIÓN =====
       
       async function payWithBankTransfer() {
-        if (cart.length === 0) {
-          Swal.fire({
-            icon: 'warning',
-            title: 'Carrito vacío',
-            text: 'Agrega productos antes de proceder al pago',
-            confirmButtonColor: '#ec4899'
-          });
-          return;
-        }
-
-        await hideCartModalIfOpen();
-
-        Swal.fire({
-          title: 'Obteniendo tasas de cambio...',
-          text: 'Un momento por favor',
-          allowOutsideClick: false,
-          didOpen: () => { Swal.showLoading(); }
-        });
-
-        await updateExchangeRates();
-        Swal.close();
-
-        let conversion = convertCartToARS(cart);
-
-        Swal.fire({
-          title: 'Transferencia Bancaria',
-          html: `
-            <div class="swal-form">
-              <div class="mb-3" style="background: #e8f4f8; padding: 15px; border-radius: 8px;">
-                <h6 class="mb-2">Datos para la transferencia:</h6>
-                <p><strong>Banco:</strong> Banco Nación</p>
-                <p><strong>Cuenta:</strong> 123456789</p>
-                <p><strong>Total:</strong> ${conversion.conversion_summary.converted}</p>
-              </div>
-              <div class="mb-3">
-                <label for="transfer-name" class="form-label">Nombre completo *</label>
-                <input type="text" id="transfer-name" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label for="transfer-email" class="form-label">Email *</label>
-                <input type="email" id="transfer-email" class="form-control" required>
-              </div>
-              <div class="mb-3">
-                <label for="transfer-phone" class="form-label">Teléfono (opcional)</label>
-                <input type="tel" id="transfer-phone" class="form-control">
-              </div>
-            </div>
-          `,
-          showCancelButton: true,
-          confirmButtonText: 'Confirmar transferencia',
-          cancelButtonText: 'Cancelar',
-          confirmButtonColor: '#2d5f3f',
-          cancelButtonColor: '#6c757d',
-          preConfirm: () => {
-            const name = document.getElementById('transfer-name').value.trim();
-            const email = document.getElementById('transfer-email').value.trim();
-            const phone = document.getElementById('transfer-phone').value.trim();
-
-            if (!name) {
-              Swal.showValidationMessage('Por favor ingresa tu nombre completo');
-              return false;
-            }
-            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-              Swal.showValidationMessage('Por favor ingresa un email válido');
-              return false;
-            }
-
-            return { name, email, phone };
-          },
-          allowOutsideClick: false
-        }).then((result) => {
-          if (result.isConfirmed) {
-            createBankTransferOrder(result.value, conversion);
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            openCart();
+          if (cart.length === 0) {
+              Swal.fire({
+                  icon: 'warning',
+                  title: 'Carrito vacío',
+                  text: 'Agrega productos antes de proceder al pago',
+                  confirmButtonColor: '#ec4899'
+              });
+              return;
           }
-        });
+
+          // Mostrar loading mientras actualiza tasas
+          Swal.fire({
+              title: 'Obteniendo tasas de cambio...',
+              text: 'Un momento por favor',
+              allowOutsideClick: false,
+              didOpen: () => {
+                  Swal.showLoading();
+              }
+          });
+
+          // Actualizar tasas de cambio
+          await updateExchangeRates();
+          
+          // Convertir carrito
+          const conversion = convertCartToARS(cart);
+          
+          Swal.close();
+
+          // Mostrar formulario con precios convertidos
+          Swal.fire({
+              title: 'Transferencia Bancaria',
+              html: `
+                  <div class="swal-form">
+                      <div class="mb-3" style="background: #e8f4f8; padding: 15px; border-radius: 8px;">
+                          <h6 style="color: #0c5460; margin-bottom: 10px;">Resumen del pedido</h6>
+                          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                              <span>Total en UYU:</span>
+                              <strong>${conversion.conversion_summary.original}</strong>
+                          </div>
+                          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                              <span>Total en ARS:</span>
+                              <strong style="color: #2d5f3f;">${conversion.conversion_summary.converted}</strong>
+                          </div>
+                          <small style="color: #666;">Tasa: 1 UYU = ${conversion.exchange_rate} ARS</small>
+                      </div>
+                      
+                      <div class="mb-3">
+                          <label for="transfer-name" class="form-label">Nombre completo *</label>
+                          <input type="text" id="transfer-name" class="swal2-input form-control" 
+                                 placeholder="Ingresa tu nombre completo" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="transfer-email" class="form-label">Email *</label>
+                          <input type="email" id="transfer-email" class="swal2-input form-control" 
+                                 placeholder="tu@email.com" required>
+                      </div>
+                      <div class="mb-3">
+                          <label for="transfer-phone" class="form-label">Teléfono (opcional)</label>
+                          <input type="tel" id="transfer-phone" class="swal2-input form-control" 
+                                 placeholder="+598 99 123 456">
+                      </div>
+                      <small class="text-muted">* La transferencia se realizará en pesos argentinos (ARS)</small>
+                  </div>
+              `,
+              showCancelButton: true,
+              confirmButtonText: 'Continuar con transferencia',
+              cancelButtonText: 'Cancelar',
+              confirmButtonColor: '#2d5f3f',
+              cancelButtonColor: '#6c757d',
+              didOpen: () => {
+                  setTimeout(() => {
+                      const nameInput = document.getElementById('transfer-name');
+                      if (nameInput) nameInput.focus();
+                  }, 100);
+              },
+              preConfirm: () => {
+                  const name = document.getElementById('transfer-name').value.trim();
+                  const email = document.getElementById('transfer-email').value.trim();
+                  const phone = document.getElementById('transfer-phone').value.trim();
+                  
+                  if (!name) {
+                      Swal.showValidationMessage('Por favor ingresa tu nombre completo');
+                      return false;
+                  }
+                  
+                  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                      Swal.showValidationMessage('Por favor ingresa un email válido');
+                      return false;
+                  }
+                  
+                  return { name, email, phone };
+              }
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  createBankTransferOrder(result.value, conversion);
+              }
+          });
       }
 
       // Función para crear orden con datos convertidos
@@ -1307,62 +1315,75 @@ Realizaré la transferencia y enviaré comprobante. ¡Gracias!`;
 
       // ===== MERCADOPAGO =====
       
-      async function payWithMercadoPago() {
+      function payWithMercadoPago() {
         if (cart.length === 0) {
-          Swal.fire({
-            icon: 'warning',
-            title: 'Carrito vacío',
-            text: 'Agrega productos antes de proceder al pago',
-            confirmButtonColor: '#ec4899'
-          });
-          return;
+            Swal.fire({
+                icon: 'warning',
+                title: 'Carrito vacío',
+                text: 'Agrega productos antes de proceder al pago',
+                confirmButtonColor: '#ec4899'
+            });
+            return;
         }
 
-        await hideCartModalIfOpen();
-
         Swal.fire({
-          title: 'Completar datos para MercadoPago',
-          html: `
-            <div class="swal-form">
-              <div class="mb-3">
-                <label for="customer-name" class="form-label">Nombre completo</label>
-                <input type="text" id="customer-name" class="form-control"
-                       placeholder="Ingresa tu nombre completo" required autocomplete="name">
-              </div>
-              <div class="mb-3">
-                <label for="customer-email" class="form-label">Email</label>
-                <input type="email" id="customer-email" class="form-control"
-                       placeholder="tu@email.com" required autocomplete="email">
-              </div>
-            </div>
-          `,
-          showCancelButton: true,
-          confirmButtonText: 'Continuar',
-          cancelButtonText: 'Cancelar',
-          confirmButtonColor: '#00b1ea',
-          cancelButtonColor: '#6c757d',
-          preConfirm: () => {
-            const name = document.getElementById('customer-name').value.trim();
-            const email = document.getElementById('customer-email').value.trim();
-
-            if (!name) {
-              Swal.showValidationMessage('Por favor ingresa tu nombre completo');
-              return false;
-            }
-            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-              Swal.showValidationMessage('Por favor ingresa un email válido');
-              return false;
-            }
-            return { name, email };
-          },
-          allowOutsideClick: false,
-          allowEscapeKey: true
+            title: 'Completar datos para MercadoPago',
+            html: `
+                <div class="swal-form">
+                    <div class="mb-3">
+                        <label for="customer-name" class="form-label">Nombre completo</label>
+                        <input type="text" id="customer-name" class="form-control swal2-input" 
+                               placeholder="Ingresa tu nombre completo" required autocomplete="name">
+                    </div>
+                    <div class="mb-3">
+                        <label for="customer-email" class="form-label">Email</label>
+                        <input type="email" id="customer-email" class="form-control swal2-input" 
+                               placeholder="tu@email.com" required autocomplete="email">
+                    </div>
+                </div>
+            `,
+            showCancelButton: true,
+            confirmButtonText: 'Continuar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#00b1ea',
+            cancelButtonColor: '#6c757d',
+            didOpen: () => {
+                setTimeout(() => {
+                    const nameInput = document.getElementById('customer-name');
+                    if (nameInput) {
+                        nameInput.focus();
+                        nameInput.click();
+                    }
+                }, 100);
+            },
+            preConfirm: () => {
+                const name = document.getElementById('customer-name').value.trim();
+                const email = document.getElementById('customer-email').value.trim();
+                
+                if (!name) {
+                    Swal.showValidationMessage('Por favor ingresa tu nombre completo');
+                    return false;
+                }
+                
+                if (!email) {
+                    Swal.showValidationMessage('Por favor ingresa tu email');
+                    return false;
+                }
+                
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    Swal.showValidationMessage('Por favor ingresa un email válido');
+                    return false;
+                }
+                
+                return { name, email };
+            },
+            allowOutsideClick: false,
+            allowEscapeKey: true
         }).then((result) => {
-          if (result.isConfirmed) {
-            processMercadoPagoPayment(result.value);
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            openCart();
-          }
+            if (result.isConfirmed) {
+                processMercadoPagoPayment(result.value);
+            }
         });
       }
 
@@ -1579,10 +1600,6 @@ Realizaré la transferencia y enviaré comprobante. ¡Gracias!`;
             onCancel: function (data) {
               console.log("Pago cancelado por usuario");
               resetPayPalButton();
-              // Reabrir carrito después de cancelación
-              setTimeout(() => {
-                openCart();
-              }, 500);
             },
           });
 
