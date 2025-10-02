@@ -2,25 +2,27 @@
 // config.php - Configuración FINAL para bienestarfloral.com
 return [
     'paypal' => [
-        'client_id' => 'Aeik_Dpc4NKf4uIqfo1p-Iejnk_a5WHXhCVSFxZ_LBYX2-9NcGwmBQevu4IF6FwtXZ2r4aYg_r1dsrQl',
-        'client_secret' => 'EBb89ySnKpF_FSj4zlMlQiiRbxRV8vMcSzK9Z2BEwaesEJd2PObCAHlHJ9tFhw_6_0sBgb-Jf9VIw845', // CAMBIAR por tu secret real
+        'client_id' => 'AYIac8tPbTkYxGzj2OtDstHDrx2tI77pDzU1fKvhjNLddGbvUc--QCibuL0ralGg4O3NxI6nUTk3Sz70',
+        'client_secret' => 'EGOqZrbh8a45Gp_pIP_Hj8mCOfTpKG00EBttEwUNcz2d0-x07YQY6Eylp15m5rKx2qnWfYZ46qQiZOY4', // CAMBIAR por tu secret real
         'mode' => 'live', // CAMBIAR a 'live' para producción
-        'webhook_id' => '2GL029296X733550S' // Se configura después
+        'webhook_id' => '74T970749D892893J' 
     ],
     'mercadopago' => [
-        'access_token' => 'TU_MERCADOPAGO_ACCESS_TOKEN', // Opcional: Solo si usarás MercadoPago
-        'public_key' => 'TU_MERCADOPAGO_PUBLIC_KEY',
-        'webhook_secret' => 'TU_WEBHOOK_SECRET'
+        'access_token' => 'APP_USR-5378648928929883-091916-cae10c5448bc29726af0ef1579500f4e-1351029190',
+        'public_key' => 'APP_USR-d56404a3-9b94-4485-96af-443119e8fc7b',
+        'client_id' => '5378648928929883',
+        'client_secret' => '2DkC3KtHcgLtNAZldnkpeY2jwRl3Q4Nw',
+        'webhook_secret' => 'TU_WEBHOOK_SECRET' // Nunca me lo dio
     ],
     'bank_transfer' => [
-    'bank_name' => 'Banco Nación Argentina',
-    'account_holder' => 'Claudia Noemi De Meis Acosta',
-    'account_number' => 'CA $ 17602581066877',
-    'cuil' => '27955713287',
-    'cbu' => '0110258330025810668779',
-    'alias' => 'clau.bienestar.bna',
-    'currency' => 'ARS',
-    'instructions' => 'Incluir número de pedido en el concepto de la transferencia'
+        'bank_name' => 'Banco Nación Argentina',
+        'account_holder' => 'Claudia Noemi De Meis Acosta',
+        'account_number' => 'CA $ 17602581066877',
+        'cuil' => '27955713287',
+        'cbu' => '0110258330025810668779',
+        'alias' => 'clau.bienestar.bna',
+        'currency' => 'ARS',
+        'instructions' => 'Incluir número de pedido en el concepto de la transferencia'
     ],
 
     'database' => [
